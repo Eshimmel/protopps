@@ -1,0 +1,105 @@
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      body {
+        margin: auto;
+      }
+      .btn {
+        text-align: center;
+      }
+      .btnType {
+        border-color: #e8883c;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #0488ff;
+        text-align: center;
+        cursor: pointer;
+        width: auto;
+      }
+      .teamBox {
+        text-align: center;
+        padding-bottom: 20px;
+      }
+      #accordion {
+        text-align: center;
+      }
+      #accordion .ui-accordion-content {
+      width: auto;
+      background-color: gray;
+      color: white;
+      border-radius: 4px;
+      border-color: black;
+    }
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+      $(function() {
+        $("#accordion").accordion({
+          collapsible: true
+        });
+      });
+    </script>
+</head>
+
+<body>
+  <div id="accordion">
+    <% console.log(rows); var teamNumber = 0; %>
+    <% rows.forEach( row => {  %>
+        <% if (row.team == teamNumber) { %>
+        <div>
+            <p>Team: <%- row.team %></p>
+        </div>
+            <div class="teamBox">
+                <p>
+                    Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> 
+
+                </p>
+            </div>
+        
+            <% teamNumber = row.team %>
+        <%} else if (teamNumber == 0) { %>
+            <div>
+            <p>Team: <%- row.team %></p>
+        </div>
+            <div class="teamBox">
+                <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
+            </div>
+        
+            <% teamNumber = row.team %>
+        <%} else if (row.team != teamNumber) { %>
+            <%teamNumber = row.team%>
+            <% if (row.team == teamNumber) { %>
+                <div>
+                    <p>Team: <%- row.team %></p>
+                </div>
+                    <div class="teamBox">
+                        <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
+                    </div>
+                
+                    <% teamNumber = row.team %>
+                <%} else if (teamNumber == 0) { %>
+                    <div>
+                        <p>Team: <%- row.team %></p>
+                </div>
+                    <div class="teamBox">
+                        <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
+                    </div>
+                
+            <% teamNumber = row.team %>
+            <% } %>
+        <%} %>
+        
+    
+    <%});%>
+
+  </div>
+
+</body>
+</html>
