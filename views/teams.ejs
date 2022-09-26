@@ -52,50 +52,15 @@
   <div id="accordion">
     <% console.log(rows); var teamNumber = 0; %>
     <% rows.forEach( row => {  %>
-        <% if (row.team == teamNumber) { %>
         <div>
-            <p>Team: <%- row.team %></p>
+            <p>Team: <%- row.team %> Cash: <%- row.cash %></p>
         </div>
             <div class="teamBox">
                 <p>
                     Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> 
 
                 </p>
-            </div>
-        
-            <% teamNumber = row.team %>
-        <%} else if (teamNumber == 0) { %>
-            <div>
-            <p>Team: <%- row.team %></p>
-        </div>
-            <div class="teamBox">
-                <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
-            </div>
-        
-            <% teamNumber = row.team %>
-        <%} else if (row.team != teamNumber) { %>
-            <%teamNumber = row.team%>
-            <% if (row.team == teamNumber) { %>
-                <div>
-                    <p>Team: <%- row.team %></p>
-                </div>
-                    <div class="teamBox">
-                        <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
-                    </div>
-                
-                    <% teamNumber = row.team %>
-                <%} else if (teamNumber == 0) { %>
-                    <div>
-                        <p>Team: <%- row.team %></p>
-                </div>
-                    <div class="teamBox">
-                        <p>Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> </p>
-                    </div>
-                
-            <% teamNumber = row.team %>
-            <% } %>
-        <%} %>
-        
+            </div>  
     
     <%});%>
 
