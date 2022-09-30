@@ -7,7 +7,7 @@ const PORT = 4000;
 
 var file = "./db/league.db"
 var db = new sqlite3.Database(file);
-var row = []
+var playerInfo = []
 
 app.set('views', __dirname + '/views')
 app.set("view engine", "ejs");
@@ -99,7 +99,20 @@ app.post('/addplayer', (req, res) => {
 })
 
 app.get('/teams', (req, res) => {
-    
+  playerInfo = []
+    db.all(`SELECT name, salary, years, fast, change, off,
+    teams.team as team,
+    teams.cash as cash
+    FROM players
+    INNER JOIN roster ON players.id = roster.pid
+    INNER JOIN teams ON roster.tid = teams.id`, (err, rows) => {
+      rows.forEach(row => {
+        playerInfo.push(row)
+      })
+      res.render('teams', {
+        rows: playerInfo
+      })
+    })
 })
 
 
