@@ -50,21 +50,27 @@
 
 <body>
   <div id="accordion">
-    <% var teamNumber = 0; %>
-    <% rows.forEach( row => {  %>
+     <% var teamNumber = 0; %>
+    <% for (var x in rows) {%>
+      <% for (var y in rows[x]) { %>
         <div>
-            <p>Team: <%- row.team %> Cash: <%- row.cash %></p>
+            <p>Team: <%- rows[x][y][0].team %> Cash: <%- rows[x][y][0].cash %></p>
         </div>
             <div class="teamBox">
+              <% for (var z in rows[x][y]) { %>
                 <p>
-                    Name: <%- row.name %> Years: <%- row.years %> Salary: <%- row.salary %> 
+                    Name: <%- rows[x][y][z].name %> Years: <%- rows[x][y][z].years %> Salary: <%- rows[x][y][z].salary %> 
 
                 </p>
+                <% } %>
             </div>  
-    
-    <%});%>
+            <% } %>
+    <%};%>
 
   </div>
+<form action="/advanceyear" method="post">
+  <input type="submit" value="Advance Year">
+</form>
 
 </body>
 </html>

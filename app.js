@@ -8,10 +8,14 @@ const PORT = 4000;
 var file = "./db/league.db"
 var db = new sqlite3.Database(file);
 var playerInfo = []
+var whichTeam = ''
 
 app.set('views', __dirname + '/views')
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }))
+
+
+
 
 
 
@@ -100,19 +104,74 @@ app.post('/addplayer', (req, res) => {
 
 app.get('/teams', (req, res) => {
   playerInfo = []
-    db.all(`SELECT name, salary, years, fast, change, off,
+  whichTeam = ''
+  db.all(`SELECT name, salary, years, fast, change, off,
     teams.team as team,
     teams.cash as cash
     FROM players
     INNER JOIN roster ON players.id = roster.pid
     INNER JOIN teams ON roster.tid = teams.id`, (err, rows) => {
-      rows.forEach(row => {
-        playerInfo.push(row)
-      })
-      res.render('teams', {
-        rows: playerInfo
-      })
+    rows.forEach(row => {
+      if (whichTeam != row.team) {
+        whichTeam = row.team
+        teamInfo = [{
+          name: row.name,
+          team: row.team,
+          salary: row.salary,
+          years: row.years,
+          stats: {
+            fastball: row.fast,
+            change: row.change,
+            offspeed: row.off
+          },
+          cash: row.cash
+        }]
+        row.team = {[row.team]: teamInfo}
+        playerInfo.push(row.team)
+
+      } else if (whichTeam == row.team) {
+        for (var x in playerInfo) {
+          for (var y in playerInfo[x])
+          if (playerInfo[x][y][0].team == row.team) {
+              playerInfo[x][y].push({
+              name: row.name,
+              team: row.team,
+              salary: row.salary,
+              years: row.years,
+              stats: {
+                fastball: row.fast,
+                change: row.change,
+                offspeed: row.off
+              },
+              cash: row.cash
+            })
+          }
+        }
+      }
     })
+    res.render('teams', {
+      rows: playerInfo
+    })
+  })
+})
+
+app.post('/advanceyear', (req, res) => {
+  db.all(`SELECT name, salary, years, fast, change, off,
+    teams.team as team,
+    teams.cash as cash
+    FROM players
+    INNER JOIN roster ON players.id = roster.pid
+    INNER JOIN teams ON roster.tid = teams.id`, (err, rows) => {
+      console.log(rows);
+    rows.forEach(row => {
+      row.years -= 1
+      console.log(row.years);
+      row.cash -= row.salary
+      db.run(`UPDATE players SET years=? WHERE name=?`, [row.years, row.name])
+      db.run(`UPDATE teams SET cash=? WHERE team=?`, [row.cash, row.team])
+    })
+  })
+  res.redirect('/teams')
 })
 
 
